@@ -68,6 +68,19 @@ The failure message expands to a standard library stream object so you can use f
 	T(assertion, "This failed because " << some_error_string << " code " << some_code);
 ```
 
+## Long Running Tests
+
+Some tests are long running and shouldn't run every time you run the code.  ULightCpp calls these tests stress tests.  Create a stress test as follows:
+
+```
+STRESSTEST(test_something)
+{
+	// Some long running test
+}
+```
+
+This test will be skipped unless the test executable is run with the `-s` or `--stress` command line argument.
+
 ## Linking ULightCpp as a Library
 
 The ULightCpp files can be linked in as a static library instead of directly adding them to the main executable.  The code has however not been written to be housed in a dynamic library or shared object.
@@ -91,7 +104,8 @@ TEST(mybenchmarkedThing)
 }
 ```
 
-When the test runs it will be timed and the performance data output with the test data
+When the test runs it will be timed.  To see the benchmark in the output run the tests with the `-b` or `--benchmark`
+command line argument.
 
 ## Setup and Teardown
 
@@ -121,9 +135,15 @@ Sometimes you need to get multiple threads running concurrently to test parallel
 To create a multi-threaded test initialise any pre-requisites (like starting the TCP server) in the `SETUP` and `TEARDOWN` functions as detailed already, then create the test task as follows:
 
 ```
-TEST_TASK(mytest, clientThread, 10)
+TEST_TASK(mytest, taskA, 10)
+{
+
+}
+
+TEST_TASK(mytest, taskB, 5)
 {
 
 }
 ```
-Note that the first parameter must match the test name used in the `SETUP` and `TEARDOWN` functions.
+
+The above example will create 10 tasks of type 'taskA' and 5 tasks of type 'taskB' to be run concurrently.  The test will run until all tasks exit.  Note that the first parameter must match the test name used in the `SETUP` and `TEARDOWN` functions.
