@@ -2,6 +2,8 @@
 
 ULightCpp is an extremely light weight unit test framework for C++ that make writing unit tests, performance benchmarks, and stress tests from large numbers of concurrent threads trivially simple to implement.
 
+ULight runs as a standalone command line executable into which the tests are built.  The intent is that the executable can be deployed anywhere and run with no external dependencies.
+
 ## How-To
 
 To use the test harness create a command line program and add the following files:
